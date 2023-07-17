@@ -1,0 +1,48 @@
+CHANGES IN chem16S 1.0.0 (2023-07-17)
+-------------------------------------
+
+- Add functions for integration with phyloseq: ps_taxacounts(), ps_metrics(),
+  plot_ps_metrics(), and plot_ps_metrics2().
+
+- Add vignettes: *Chemical metrics of reference proteomes*, *Integration of
+  chem16S with phyloseq*, and *Plotting two chemical metrics*.
+
+- Change default reference database from RefSeq to GTDB.
+
+- Add metrics: nO2, GRAVY, pI, MW, length, H/C, N/C, O/C, and S/C.
+
+- Rename readRDP() to read_RDP(), getmetrics() to get_metrics(), plotmet() to
+  plot_metrics(), and other analogous changes to function names.
+
+- First release on CRAN.
+
+CHANGES IN chem16S 0.1.3 (2023-02-12)
+-------------------------------------
+
+- Add 'pt.open.col' argument to plotmet() for border color of open plot symbols.
+
+- Add 'xlab' and 'ylab' arguments to plotmet().
+
+CHANGES IN chem16S 0.1.2 (2022-10-24)
+-------------------------------------
+
+- Add reference proteomes for taxa based on the Genome Taxonomy Database (GTDB).
+
+- Add 'return_AA' argument to getmetrics() to return amino acid composition.
+
+- Add 'zero_AA' argument to getmetrics() to specify amino acids with
+  abundances set to zero for calculating chemical metrics.
+
+CHANGES IN chem16S 0.1.1 (2022-10-11)
+-------------------------------------
+
+- Add 'cex' argument to plotmet().
+
+- Don't drop dimensions in readRDP().
+
+- Change "estimated community proteomes" to "community reference proteomes".
+
+CHANGES IN chem16S 0.1.0 (2022-07-04)
+-------------------------------------
+
+- First release on GitHub.
