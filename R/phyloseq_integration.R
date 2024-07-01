@@ -29,9 +29,14 @@ ps_taxacounts <- function(physeq, split = TRUE) {
   # Initialize taxid (OTU name), lineage, name, and rank columns
   taxid <- rownames(taxacounts)
   taxacounts <- cbind(taxid, lineage = NA, name = NA, rank = NA, taxacounts)
+  # Get ranks from column names of taxonomic table 20240121
+  ps_ranks <- phyloseq::rank_names(physeq)
+  # Allow Domain or Kingdom, and exclude Species
+  allowed_ranks <- c("Domain", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+  ranks <- intersect(ps_ranks, allowed_ranks)
   # Loop over taxonomic ranks
-  for(rank in c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus")) {
-    # Get classifications at this rank
+  for(rank in ranks) {
+    # Get classifications for this rank
     names <- as.vector(taxtable[, rank])
     # Insert non-NA classifications into data frame
     is.classified <- !is.na(names)
@@ -46,8 +51,8 @@ ps_taxacounts <- function(physeq, split = TRUE) {
     taxacounts$lineage[ichl] <- paste(taxacounts$lineage[ichl], names[ichl], sep = ";")
   }
 
-  # Exclude domain (kingdom)-level classifications 20230618
-  taxacounts <- taxacounts[taxacounts$rank != "kingdom", ]
+  # Exclude domain/kingdom-level classifications 20230618
+  taxacounts <- taxacounts[! taxacounts$rank %in% c("domain", "kingdom"), ]
   # Exclude NA classifications 20230625
   taxacounts <- taxacounts[!is.na(taxacounts$lineage), ]
 
@@ -71,7 +76,7 @@ ps_taxacounts <- function(physeq, split = TRUE) {
 }
 
 # Calculate chemical metrics from phyloseq object
-ps_metrics <- function(physeq, split = TRUE, refdb = "GTDB", quiet = FALSE, ...) {
+ps_metrics <- function(physeq, split = TRUE, refdb = "GTDB_214", quiet = FALSE, ...) {
   # Obtain data frame with lowest-level (to genus) classifications for each OTU
   taxacounts <- ps_taxacounts(physeq, split = split)
   # Map names to NCBI taxonomy
@@ -87,12 +92,13 @@ ps_metrics <- function(physeq, split = TRUE, refdb = "GTDB", quiet = FALSE, ...)
 
 # Plot individual chemical metrics 20230608
 # Adapted by Jeffrey Dick from phyloseq::plot_richness() by Paul J. McMurdie
-plot_ps_metrics <- function(physeq, x = "samples", color = NULL, shape = NULL, title = NULL,
-  scales = "free_y", nrow = 1, metrics = c("Zc", "nO2", "nH2O"), sortby = NULL,
-  refdb = "GTDB", quiet = FALSE) { 
+plot_ps_metrics <- function(physeq, metrics = c("Zc", "nO2", "nH2O"), x = "samples",
+  color = NULL, shape = NULL, title = NULL,
+  scales = "free_y", nrow = 1, sortby = NULL, ...) { 
 
   # Calculate the chemical metrics
-  pmDF <- ps_metrics(physeq, metrics = metrics, refdb = refdb, quiet = quiet)
+  #pmDF <- ps_metrics(physeq, metrics = metrics, refdb = refdb, quiet = quiet)
+  pmDF <- ps_metrics(physeq, metrics = metrics, ...)
 
   # Make the plotting data.frame.
   # This coerces to data.frame, required for reliable output from reshape2::melt()
@@ -183,11 +189,14 @@ plot_ps_metrics <- function(physeq, x = "samples", color = NULL, shape = NULL, t
 
 # Plot two chemical metrics against each other 20230617
 # Parts of this function were adapted by Jeffrey Dick from phyloseq::plot_richness() by Paul J. McMurdie
-plot_ps_metrics2 <- function(physeq, x = "Zc", y = "nH2O", color = NULL, shape = NULL,
-  title = NULL, refdb = "GTDB", quiet = FALSE) { 
+plot_ps_metrics2 <- function(physeq, metrics = c("Zc", "nH2O"), color = NULL, shape = NULL,
+  title = NULL, refdb = "GTDB_214", quiet = FALSE) { 
+
+  if(length(metrics) < 2) stop("please supply the names of two metrics in 'metrics'")
+  if(length(metrics) > 2) warning("plot_ps_metrics2: 'metrics' has length > 2; using the first two")
 
   # Calculate the chemical metrics
-  pmDF <- ps_metrics(physeq, metrics = c(x, y), refdb = refdb, quiet = quiet)
+  pmDF <- ps_metrics(physeq, metrics = metrics, refdb = refdb, quiet = quiet)
 
   # Make the plotting data.frame
   if( !is.null(phyloseq::sample_data(physeq, errorIfNULL = FALSE)) ){
@@ -203,14 +212,14 @@ plot_ps_metrics2 <- function(physeq, x = "Zc", y = "nH2O", color = NULL, shape =
     DF$samples <- phyloseq::sample_names(physeq)
   }
 
-  # Start with just x and y in case color and/or shape are NULL 20230709
-  metrics_map <- aes(.data[[x]], .data[[y]])
+  # Start with just x and y variables in case color and/or shape are NULL 20230709
+  metrics_map <- aes(.data[[metrics[1]]], .data[[metrics[2]]])
   # https://stackoverflow.com/questions/20084104/combine-merge-two-ggplot-aesthetics
   if(!is.null(color)) metrics_map <- modifyList(metrics_map, aes(color = .data[[color]]))
   if(!is.null(shape)) metrics_map <- modifyList(metrics_map, aes(shape = .data[[shape]]))
 
   # Make the ggplot
-  p <- ggplot(DF, metrics_map) + geom_point(na.rm = TRUE) + xlab(chemlab(x)) + ylab(chemlab(y))
+  p <- ggplot(DF, metrics_map) + geom_point(na.rm = TRUE) + xlab(chemlab(metrics[1])) + ylab(chemlab(metrics[2]))
 
   # Optionally add a title to the plot
   if( !is.null(title) ){

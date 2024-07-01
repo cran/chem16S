@@ -1,7 +1,7 @@
-Date: 2023-07-17
+Date: 2024-07-01
 Package: chem16S
-Version: 1.0.0
-Title: Chemical Metrics of Community Reference Proteomes
+Version: 1.1.0
+Title: Chemical Metrics for Microbial Communities
 Authors@R: c(
     person("Jeffrey", "Dick", , "j3ffdick@gmail.com", role = c("aut", "cre"),
       comment = c(ORCID = "0000-0002-0687-5890"))
@@ -9,7 +9,7 @@ Authors@R: c(
 Author: Jeffrey Dick [aut, cre] (<https://orcid.org/0000-0002-0687-5890>)
 Maintainer: Jeffrey Dick <j3ffdick@gmail.com>
 Depends: R (>= 3.5.0)
-Imports: plyr, ggplot2, rlang, reshape2, phyloseq
+Imports: plyr, ggplot2, rlang, reshape2, phyloseq, canprot (>= 2.0.0)
 Suggests: tinytest, knitr, patchwork, ggpmisc, rmarkdown
 Description: Combines taxonomic classifications of high-throughput 16S rRNA
   gene sequences with reference proteomes of archaeal and bacterial taxa to
@@ -31,6 +31,6 @@ VignetteBuilder: knitr
 URL: https://github.com/jedick/chem16S,
         https://doi.org/10.5281/zenodo.6793059
 NeedsCompilation: no
-Packaged: 2023-07-17 02:25:55 UTC; jedick
+Packaged: 2024-07-01 13:07:33 UTC; jedick
 Repository: CRAN
-Date/Publication: 2023-07-17 17:10:02 UTC
+Date/Publication: 2024-07-01 14:20:02 UTC

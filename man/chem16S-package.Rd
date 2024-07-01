@@ -3,7 +3,7 @@
 \alias{chem16S-package}
 \alias{chem16S}
 \docType{package}
-\title{Chemical metrics of community reference proteomes}
+\title{Chemical metrics for microbial communities}
 
 \description{
 
@@ -27,8 +27,9 @@ History:
   \enumerate{
     \item Work begun in 2021. The combination of RefSeq reference proteomes with taxonomic abundances to compute community-level chemical metrics was described by Dick and Tan (2023). \pkg{chem16S} originated as code in the \pkg{JMDplots} package (\url{https://github.com/jedick/JMDplots}).
     \item Development in 2022. Dick and Meng (2023) compared community \Zc with redox potential measurements from local to global scales. The term \dQuote{community reference proteomes} was first applied, and \pkg{chem16S} was split into a separate package.
-    \item Late 2022. GTDB was added as a reference database.
-    \item June--July 2023. Integration with \pkg{phyloseq} and addition of vignettes: \emph{Chemical metrics of reference proteomes}, \emph{Integration of chem16S with phyloseq}, and \emph{Plotting two chemical metrics}. Default reference database changed to GTDB.
+    \item Late 2022. GTDB r207 was added as a reference database.
+    \item June--July 2023. Integration with \pkg{phyloseq} and addition of vignettes: \emph{Chemical metrics of reference proteomes}, \emph{Integration of chem16S with phyloseq}, and \emph{Plotting two chemical metrics}. Default reference database changed to GTDB r207.
+    \item April 2024. Updated to GTDB r214.
   }
 
 }
@@ -51,7 +52,7 @@ History:
 }
 
 
-\section{Files in extdata/RefSeq}{
+\section{Files in RefDB/RefSeq_206}{
 
   NOTE: None of the \file{*.R} files in the \file{extdata} directories are included in the package submitted to CRAN; see GitHub or Zenodo for these files.
 
@@ -64,26 +65,25 @@ History:
 
     \item{\file{README.txt}}{Description of steps to generate reference proteomes of species-level taxa (including downloads and shell commands).}
     \item{\file{gencat.sh}}{Helper script to extract microbial protein records from the RefSeq catalog.}
-    \item{\file{protein_refseq.R}}{
+    \item{\file{genome_AA.R}}{
       R code to sum the amino acid compositions of all proteins for each bacterial, archaeal, and viral species in the NCBI Reference Sequence database.
-      NOTE: To save space, the output file (\file{protein_refseq.csv}) is not stored here but is in the \code{extdata/RefSeq} directory of the JMDplots package on GitHub (\url{https://github.com/jedick/JMDplots}.
+      NOTE: To save space in this package, the output file (\file{genome_AA.csv}) is stored in the \code{RefDB/RefSeq_206} directory of the JMDplots package on GitHub (\url{https://github.com/jedick/JMDplots}.
       The first five columns are: \code{protein} (\dQuote{refseq}), \code{organism} (taxonomic id), \code{ref} (organism name), \code{abbrv} (empty), \code{chains} (number of protein sequences for this organism).
       Columns 6 to 25 have the counts of amino acids.
     }
-    \item{\file{taxon_names.R}}{
-      R code for processing taxonomic IDs; the output file is \file{taxon_names.csv}.
+    \item{\file{taxonomy.R}}{
+      R code for processing taxonomic IDs; the output file is \file{taxonomy.csv}.
       The columns are NCBI taxonomic ID (taxid), and names at different taxonomic rank (species, genus, family, order, class, phylum, superkingdom).
     }
 
     \item{\file{taxon_AA.R}}{Functions to create the files listed below:}
     \item{\file{taxon_AA.csv.xz}}{Average amino acid composition of reference proteomes for all species in each genus, family, order, class, phylum, and superkingdom.}
-    \item{\file{taxon_metrics.csv.xz}}{Selected chemical metrics (\Zc and \nH2O) of reference proteomes for taxa at genus and higher ranks.}
 
   }
 
 }
 
-\section{Files in extdata/GTDB}{
+\section{Files in RefDB/GTDB_214}{
 
   \describe{
     \item{\file{taxon_AA.R}}{Functions to process GTDB source files (Parks et al., 2022) and produce the following output file:}
@@ -113,7 +113,7 @@ History:
   \describe{
     \item{\file{pipeline.R}}{
       Pipeline for sequence data processing (uses external programs fastq-dump, vsearch, seqtk, RDP Classifier).
-      This was used to make the files in both \file{RDP} and \file{RDP-GTDB} (the latter with \code{GTDB = TRUE} in the script).
+      This was used to make the files in both \file{RDP} and \file{RDP-GTDB_207} (the latter with \code{GTDB = TRUE} in the script).
     }
     \item{\file{BGPF13.tab.xz}}{Heart Lake Geyser Basin.}
     \item{\file{HLA+16.tab.xz}}{Baltic Sea.}
@@ -122,9 +122,9 @@ History:
 
 }
 
-\section{Files in extdata/RDP-GTDB}{
+\section{Files in extdata/RDP-GTDB_207}{
 
-  Output of RDP Classifer using the GTDB SSU training set (\doi{10.5281/zenodo.7633100}).
+  Output of RDP Classifer using the GTDB r207 SSU training set (\doi{10.5281/zenodo.7633100}).
 
   \describe{
     \item{\file{BGPF13.tab.xz}}{Heart Lake Geyser Basin.}
@@ -134,9 +134,9 @@ History:
 
 }
 
-\section{Files in extdata/DADA2}{
+\section{Files in extdata/DADA2-GTDB_214}{
 
-  Identification and taxonomic classification of sequences using DADA2.
+  Identification and taxonomic classification of sequences using DADA2 with GTDB r214.
 
   \describe{
     \item{\file{FEN+22}}{
@@ -168,7 +168,7 @@ Bowen De León K, Gerlach R, Peyton BM, Fields MW. 2013. Archaeal and bacterial 
 
 Callahan B. 2020. DADA2 Pipeline Tutorial (1.16). \url{https://benjjneb.github.io/dada2/tutorial.html}, accessed on 2023-06-14.
 
-Dick JM, Meng D. 2023. Community- and genome-based evidence for a shaping influence of redox potential on bacterial protein evolution. \emph{mSystems}. \doi{10.1128/msystems.00014-23}
+Dick JM, Meng D. 2023. Community- and genome-based evidence for a shaping influence of redox potential on bacterial protein evolution. \emph{mSystems} \bold{8}(3): e00014-23. \doi{10.1128/msystems.00014-23}
 
 Dick JM, Tan J. 2023. Chemical links between redox conditions and estimated community proteomes from 16S rRNA and reference protein sequences. \emph{Microbial Ecology} \bold{85}: 1338--1355. \doi{10.1007/s00248-022-01988-9}
 
@@ -180,7 +180,7 @@ O'Leary NA et al. 2016. Reference sequence (RefSeq) database at NCBI: current st
 
 Parks DH, Chuvochina M, Rinke C, Mussig AJ, Chaumeil P-A, Hugenholtz P. 2022. GTDB: an ongoing census of bacterial and archaeal diversity through a phylogenetically consistent, rank normalized and complete genome-based taxonomy. \emph{Nucleic Acids Research} \bold{50}: D785--D794. \doi{10.1093/nar/gkab776}
 
-Swingley WD, Meyer-Dombard DR, Shock EL, Alsop EB, Falenski HD, Havig JR, Raymond J. 2012. Coordinating environmental genomics and geochemistry reveals metabolic transitions in a hot spring ecosystem. \emph{PLOS One} \bold{7}(6): e38108. \doi{doi.org/10.1371/journal.pone.0038108}
+Swingley WD, Meyer-Dombard DR, Shock EL, Alsop EB, Falenski HD, Havig JR, Raymond J. 2012. Coordinating environmental genomics and geochemistry reveals metabolic transitions in a hot spring ecosystem. \emph{PLOS One} \bold{7}(6): e38108. \doi{10.1371/journal.pone.0038108}
 
 Zhang H-S, Feng Q-D, Zhang D-Y, Zhu G-L, Yang L. 2023. Bacterial community structure in geothermal springs on the northern edge of Qinghai-Tibet plateau. \emph{Frontiers in Microbiology} \bold{13}: 994179. \doi{10.3389/fmicb.2022.994179}
 

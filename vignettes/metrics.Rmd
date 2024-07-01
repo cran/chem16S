@@ -1,12 +1,12 @@
 ---
-title: "Chemical metrics of reference proteomes"
+title: "Chemical metrics of reference proteomes for taxa"
 author: "Jeffrey M. Dick"
 output:
   html_vignette:
     mathjax: null
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Chemical metrics of reference proteomes}
+  %\VignetteIndexEntry{Chemical metrics of reference proteomes for taxa}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: chem16S.bib
@@ -64,7 +64,7 @@ This vignette was compiled on `r Sys.Date()` with **chem16S** version `r session
 * Read the acid compositions of reference proteomes.
 * Show the counts of taxa at each level (taxonomic rank).
 ```{r taxon_AA}
-taxon_AA <- read.csv(system.file("extdata/RefSeq/taxon_AA.csv.xz", package = "chem16S"))
+taxon_AA <- read.csv(system.file("RefDB/RefSeq_206/taxon_AA.csv.xz", package = "chem16S"))
 ranks <- taxon_AA$protein
 table(ranks)[unique(ranks)]
 ```
@@ -72,7 +72,7 @@ table(ranks)[unique(ranks)]
 * Calculate `r Zc`.
 * Make boxplots for the taxa at each rank.
 ```{r Zc_boxplot, fig.width = 5, fig.height = 5, fig.align = "center", pngquant = pngquant}
-taxon_Zc <- calc_metrics(taxon_AA, "Zc")[, 1]
+taxon_Zc <- canprot::calc_metrics(taxon_AA, "Zc")[, 1]
 Zc_list <- sapply( unique(ranks), function(rank) taxon_Zc[ranks == rank] )
 opar <- par(mar = c(4, 7, 1, 1))
 boxplot(Zc_list, horizontal = TRUE, las = 1, xlab = chemlab("Zc"))
@@ -86,7 +86,7 @@ par(opar)
 * Define a function to get `r Zc` for named genera.
 * Calculate mean `r Zc` for genera in selected phyla.
 ```{r phylum_to_genus}
-taxnames <- read.csv(system.file("extdata/RefSeq/taxon_names.csv.xz", package = "chem16S"))
+taxnames <- read.csv(system.file("RefDB/RefSeq_206/taxonomy.csv.xz", package = "chem16S"))
 phylum_to_genus <- function(phylum) na.omit(unique(taxnames$genus[taxnames$phylum == phylum]))
 get_Zc <- function(genera) na.omit(taxon_Zc[match(genera, taxon_AA$organism)])
 sapply(sapply(sapply(c("Crenarchaeota", "Euryarchaeota"), phylum_to_genus), get_Zc), mean)
@@ -143,7 +143,7 @@ par(opar)
 As above, but calculate `r nH2O` instead of `r Zc`.
 
 ```{r class_nH2O, fig.width = 10, fig.height = 5, fig.align = "center", pngquant = pngquant}
-taxon_nH2O <- calc_metrics(taxon_AA, "nH2O")[, 1]
+taxon_nH2O <- canprot::calc_metrics(taxon_AA, "nH2O")[, 1]
 get_nH2O <- function(genera) na.omit(taxon_nH2O[match(genera, taxon_AA$organism)])
 
 opar <- par(mfrow = c(1, 2), mar = c(4, 10, 1, 1))
@@ -194,17 +194,17 @@ par(opar)
 
 ## Other metrics
 
-Besides `r Zc` and `r nH2O`, **chem16S** can calculate elemental ratios (H/C, N/C, O/C, and S/C), grand average of hydropathicity (GRAVY), isoelectric point (pI), average molecular weight of amino acid residues (MW), and protein length.
+Besides `r Zc` and `r nH2O`, the `calc_metrics()` function in **canprot** can calculate elemental ratios (H/C, N/C, O/C, and S/C), grand average of hydropathicity (GRAVY), isoelectric point (pI), average molecular weight of amino acid residues (MW), and protein length.
 
 ```{r other_metrics, fig.width = 8, fig.height = 5, fig.align = "center", pngquant = pngquant}
 AAcomp <- taxon_AA[match(classes, taxon_AA$organism), ]
-metrics <- calc_metrics(AAcomp, c("H_C", "O_C", "N_C", "S_C", "GRAVY", "pI", "MW", "Length"))
+metrics <- canprot::calc_metrics(AAcomp, c("HC", "OC", "NC", "SC", "GRAVY", "pI", "MW", "plength"))
 layout(rbind(c(1, 2, 5), c(3, 4, 5)), widths = c(2, 2, 1.5))
 opar <- par(mar = c(4.5, 4, 1, 1), cex = 1)
-plot(metrics$O_C, metrics$H_C, col = 1:10, pch = 1:10, xlab = "O/C", ylab = "H/C")
-plot(metrics$N_C, metrics$S_C, col = 1:10, pch = 1:10, xlab = "N/C", ylab = "S/C")
+plot(metrics$OC, metrics$HC, col = 1:10, pch = 1:10, xlab = "O/C", ylab = "H/C")
+plot(metrics$NC, metrics$SC, col = 1:10, pch = 1:10, xlab = "N/C", ylab = "S/C")
 plot(metrics$pI, metrics$GRAVY, col = 1:10, pch = 1:10, xlab = "pI", ylab = "GRAVY")
-plot(metrics$Length, metrics$MW, col = 1:10, pch = 1:10, xlab = "Length", ylab = "MW")
+plot(metrics$plength, metrics$MW, col = 1:10, pch = 1:10, xlab = "Length", ylab = "MW")
 plot.new()
 legend("right", classes, col = 1:10, pch = 1:10, bty = "n", xpd = NA)
 par(opar)
@@ -220,7 +220,6 @@ Respectively, these findings suggest genomic adaptation by Methanococci and Epsi
 A notable observation in this regard is that viruses without an envelope have lower water content than bacterial cells [@Mat75].
 
 In summary, chemical metrics provide insight into how environmental factors shape the amino acid and elemental composition of proteins.
-The study of genomic variation using geochemical methods is part of a new field called geochemical biology.
 
 ## References
 

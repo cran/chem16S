@@ -3,20 +3,20 @@
 \alias{get_metrics}
 \title{Calculate chemical metrics of community reference proteomes}
 \description{
-Combines RDP classifications with RefSeq reference proteomes to get amino acid compositions of community reference proteomes.
+Combines taxonomic classifications with reference proteomes for taxa to get amino acid compositions of community reference proteomes.
 Amino acid compositions are used to calculate chemical metrics.
 }
 
 \usage{
-  get_metrics(RDP, map, refdb = "GTDB", taxon_AA = NULL, groups = NULL,
+  get_metrics(RDP, map, refdb = "GTDB_214", taxon_AA = NULL, groups = NULL,
     return_AA = FALSE, zero_AA = NULL, metrics = c("Zc", "nO2", "nH2O"))
 }
 
 \arguments{
   \item{RDP}{data frame, taxonomic abundances produced by \code{\link{read_RDP}} or \code{\link{ps_taxacounts}}}
   \item{map}{data frame, taxonomic mapping produced by \code{\link{map_taxa}}}
-  \item{refdb}{character, name of reference database (\samp{GTDB} or \samp{RefSeq})}
-  \item{taxon_AA}{data frame, contents of \file{taxon_AA.csv.xz} in \file{extdata/GTDB} or \file{extdata/RefSeq} (optionally used for speed-up)}
+  \item{refdb}{character, name of reference database (\samp{GTDB_214} or \samp{RefSeq_206})}
+  \item{taxon_AA}{data frame, amino acid compositions of taxa, used to bypass \code{refdb} specification}
   \item{groups}{list of indexing vectors, samples to be aggregated into groups}
   \item{return_AA}{logical, return the amino acid composition for each sample instead of the chemical metrics?}
   \item{zero_AA}{character, three-letter abbreviation(s) of amino acid(s) to assign zero counts for calculating chemical metrics}
@@ -31,7 +31,7 @@ The community reference proteome is computed from the amino acid compositions of
 \code{map} defines the taxonomic mapping between \code{RDP} and \code{refdb}.
 Then, chemical metrics are calculated from the amino acid composition of the community reference proteome.
 The default chemical metrics are carbon oxidation state (\Zc), stoichiometric oxidation state (\nO2), and stoichiometric hydration state (\nH2O).
-See \code{\link{calc_metrics}} for other available metrics.
+See \code{\link[canprot]{calc_metrics}} for other available metrics.
 
 \code{groups}, if given, is a list of one or more indexing vectors (with logical or numeric values) corresponding to samples whose taxonomic classifications are aggregated into groups before calculating amino acid compositions and chemical metrics.
 
@@ -44,7 +44,7 @@ The remaining columns have numeric values and are named for each of the calculat
 }
 
 \seealso{
-\code{\link{calc_metrics}}, \code{\link{plot_metrics}}
+\code{\link[canprot]{calc_metrics}}, \code{\link{plot_metrics}}
 }
 
 \examples{
@@ -54,9 +54,9 @@ The remaining columns have numeric values and are named for each of the calculat
 # Get chemical metrics for all samples in a dataset
 RDPfile <- system.file("extdata/RDP/BGPF13.tab.xz", package = "chem16S")
 RDP <- read_RDP(RDPfile)
-map <- map_taxa(RDP, refdb = "RefSeq")
+map <- map_taxa(RDP, refdb = "RefSeq_206")
 # This is a data frame with 14 rows and Run, Zc, nO2, and nH2O columns
-(metrics <- get_metrics(RDP, map, refdb = "RefSeq"))
+(metrics <- get_metrics(RDP, map, refdb = "RefSeq_206"))
 
 # Read the metadata file
 mdatfile <- system.file("extdata/metadata/BGPF13.csv", package = "chem16S")
@@ -66,13 +66,13 @@ mdat <- get_metadata(mdatfile, metrics)
 groups <- list(A = mdat$metadata$domain == "Archaea",
   B = mdat$metadata$domain == "Bacteria")
 # This is a data frame with 2 rows and group, Zc, nO2, and nH2O columns
-get_metrics(RDP, map, refdb = "RefSeq", groups = groups)
+get_metrics(RDP, map, refdb = "RefSeq_206", groups = groups)
 
 ## For the next example, classifications were made using the RDP Classifer
-## with the GTDB SSU training set, and we use reference proteomes based on GTDB
-## (this uses the default option of refdb = "GTDB").
-
-RDPfile.GTDB <- system.file("extdata/RDP-GTDB/BGPF13.tab.xz", package = "chem16S")
+## with 16S rRNA sequences from GTDB r207, but
+## reference proteomes are based on GTDB r214
+## (this uses the default option of refdb = "GTDB_214").
+RDPfile.GTDB <- system.file("extdata/RDP-GTDB_207/BGPF13.tab.xz", package = "chem16S")
 RDP.GTDB <- read_RDP(RDPfile.GTDB)
 map.GTDB <- map_taxa(RDP.GTDB)
 metrics.GTDB <- get_metrics(RDP.GTDB, map.GTDB)

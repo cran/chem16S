@@ -14,19 +14,19 @@ nH2O <- "<i>n</i><sub>H<sub>2</sub>O</sub>"
 library(chem16S)
 
 ## ----taxon_AA-----------------------------------------------------------------
-taxon_AA <- read.csv(system.file("extdata/RefSeq/taxon_AA.csv.xz", package = "chem16S"))
+taxon_AA <- read.csv(system.file("RefDB/RefSeq_206/taxon_AA.csv.xz", package = "chem16S"))
 ranks <- taxon_AA$protein
 table(ranks)[unique(ranks)]
 
 ## ----Zc_boxplot, fig.width = 5, fig.height = 5, fig.align = "center", pngquant = pngquant----
-taxon_Zc <- calc_metrics(taxon_AA, "Zc")[, 1]
+taxon_Zc <- canprot::calc_metrics(taxon_AA, "Zc")[, 1]
 Zc_list <- sapply( unique(ranks), function(rank) taxon_Zc[ranks == rank] )
 opar <- par(mar = c(4, 7, 1, 1))
 boxplot(Zc_list, horizontal = TRUE, las = 1, xlab = chemlab("Zc"))
 par(opar)
 
 ## ----phylum_to_genus----------------------------------------------------------
-taxnames <- read.csv(system.file("extdata/RefSeq/taxon_names.csv.xz", package = "chem16S"))
+taxnames <- read.csv(system.file("RefDB/RefSeq_206/taxonomy.csv.xz", package = "chem16S"))
 phylum_to_genus <- function(phylum) na.omit(unique(taxnames$genus[taxnames$phylum == phylum]))
 get_Zc <- function(genera) na.omit(taxon_Zc[match(genera, taxon_AA$organism)])
 sapply(sapply(sapply(c("Crenarchaeota", "Euryarchaeota"), phylum_to_genus), get_Zc), mean)
@@ -59,7 +59,7 @@ for(phylum in c("Euryarchaeota", "Proteobacteria")) {
 par(opar)
 
 ## ----class_nH2O, fig.width = 10, fig.height = 5, fig.align = "center", pngquant = pngquant----
-taxon_nH2O <- calc_metrics(taxon_AA, "nH2O")[, 1]
+taxon_nH2O <- canprot::calc_metrics(taxon_AA, "nH2O")[, 1]
 get_nH2O <- function(genera) na.omit(taxon_nH2O[match(genera, taxon_AA$organism)])
 
 opar <- par(mfrow = c(1, 2), mar = c(4, 10, 1, 1))
@@ -95,13 +95,13 @@ par(opar)
 
 ## ----other_metrics, fig.width = 8, fig.height = 5, fig.align = "center", pngquant = pngquant----
 AAcomp <- taxon_AA[match(classes, taxon_AA$organism), ]
-metrics <- calc_metrics(AAcomp, c("H_C", "O_C", "N_C", "S_C", "GRAVY", "pI", "MW", "Length"))
+metrics <- canprot::calc_metrics(AAcomp, c("HC", "OC", "NC", "SC", "GRAVY", "pI", "MW", "plength"))
 layout(rbind(c(1, 2, 5), c(3, 4, 5)), widths = c(2, 2, 1.5))
 opar <- par(mar = c(4.5, 4, 1, 1), cex = 1)
-plot(metrics$O_C, metrics$H_C, col = 1:10, pch = 1:10, xlab = "O/C", ylab = "H/C")
-plot(metrics$N_C, metrics$S_C, col = 1:10, pch = 1:10, xlab = "N/C", ylab = "S/C")
+plot(metrics$OC, metrics$HC, col = 1:10, pch = 1:10, xlab = "O/C", ylab = "H/C")
+plot(metrics$NC, metrics$SC, col = 1:10, pch = 1:10, xlab = "N/C", ylab = "S/C")
 plot(metrics$pI, metrics$GRAVY, col = 1:10, pch = 1:10, xlab = "pI", ylab = "GRAVY")
-plot(metrics$Length, metrics$MW, col = 1:10, pch = 1:10, xlab = "Length", ylab = "MW")
+plot(metrics$plength, metrics$MW, col = 1:10, pch = 1:10, xlab = "Length", ylab = "MW")
 plot.new()
 legend("right", classes, col = 1:10, pch = 1:10, bty = "n", xpd = NA)
 par(opar)

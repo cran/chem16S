@@ -65,25 +65,25 @@ head(tc.silva$taxid)
 table(tc.silva$rank)
 
 ## ----map.silva, collapse = TRUE-----------------------------------------------
-map.silva <- map_taxa(tc.silva, refdb = "RefSeq")
+map.silva <- map_taxa(tc.silva, refdb = "RefSeq_206")
 
 ## ----map.RDP, collapse = TRUE-------------------------------------------------
 data(mouse.RDP)
 tc.RDP <- ps_taxacounts(mouse.RDP)
-map.RDP <- map_taxa(tc.RDP, refdb = "RefSeq")
+map.RDP <- map_taxa(tc.RDP, refdb = "RefSeq_206")
 
 ## ----AA.RDP, collapse = TRUE--------------------------------------------------
-AA.RDP <- ps_metrics(mouse.RDP, refdb = "RefSeq", quiet = TRUE, return_AA = TRUE)
+AA.RDP <- ps_metrics(mouse.RDP, refdb = "RefSeq_206", quiet = TRUE, return_AA = TRUE)
 head(AA.RDP)
 
 ## ----AA.RDP_length, fig.width = 7, fig.height = 5, fig.align = "center", pngquant = pngquant----
-lengths <- calc_metrics(AA.RDP, "length")[, 1]
+lengths <- canprot::calc_metrics(AA.RDP, "length")[, 1]
 hist(lengths)
 imin <- which.min(lengths)
 text(lengths[imin], 1.5, AA.RDP$Run[imin], adj = 1)
 
 ## ----metrics.RDP, collapse = TRUE---------------------------------------------
-metrics.RDP <- ps_metrics(mouse.RDP, refdb = "RefSeq", quiet = TRUE)
+metrics.RDP <- ps_metrics(mouse.RDP, refdb = "RefSeq_206", quiet = TRUE)
 head(metrics.RDP)
 
 ## ----cor.RDP, collapse = TRUE-------------------------------------------------
@@ -91,28 +91,28 @@ cor(metrics.RDP$Zc, metrics.RDP$nO2)
 cor(metrics.RDP$Zc, metrics.RDP$nH2O)
 
 ## ----plot_metrics.RDP, fig.width = 7, fig.height = 5, fig.align = "center", pngquant = pngquant----
-plot_ps_metrics(mouse.RDP, x = "Day", color = "When", shape = "When", refdb = "RefSeq", quiet = TRUE) +
+plot_ps_metrics(mouse.RDP, x = "Day", color = "When", shape = "When", refdb = "RefSeq_206", quiet = TRUE) +
   geom_point(size = 3)
 
 ## ----plot_metrics2.RDP, fig.width = 6, fig.height = 4, fig.align = "center", pngquant = pngquant----
-plot_ps_metrics2(mouse.RDP, color = "When", shape = "When", refdb = "RefSeq", quiet = TRUE) +
+plot_ps_metrics2(mouse.RDP, color = "When", shape = "When", refdb = "RefSeq_206", quiet = TRUE) +
   geom_point(size = 3)
 
 ## ----data.GTDB, collapse = TRUE, fig.width = 6, fig.height = 4, fig.align = "center", pngquant = pngquant----
-data(mouse.GTDB)
-plot_ps_metrics2(mouse.GTDB, color = "When", shape = "When") + geom_point(size = 3)
+data(mouse.GTDB_214)
+plot_ps_metrics2(mouse.GTDB_214, refdb = "GTDB_214", color = "When", shape = "When") + geom_point(size = 3)
 
 ## ----early.GTDB, collapse = TRUE, fig.width = 6, fig.height = 4, fig.align = "center", pngquant = pngquant----
-metrics.GTDB <- ps_metrics(mouse.GTDB)
-is.early <- sample_data(mouse.GTDB)$When == "Early"
+metrics.GTDB <- ps_metrics(mouse.GTDB_214)
+is.early <- sample_data(mouse.GTDB_214)$When == "Early"
 iout <- which.min(metrics.GTDB[is.early, ]$nH2O)
-(day <- sample_data(mouse.GTDB)[is.early, ]$Day[iout])
+(day <- sample_data(mouse.GTDB_214)[is.early, ]$Day[iout])
 
 ## ----barplot.GTDB, fig.width = 7, fig.height = 5, fig.align = "center", pngquant = pngquant----
-top20.GTDB <- names(sort(taxa_sums(mouse.GTDB), decreasing = TRUE))[1:20]
-mouse.GTDB.top20 <- transform_sample_counts(mouse.GTDB, function(OTU) OTU/sum(OTU))
-mouse.GTDB.top20 <- prune_taxa(top20.GTDB, mouse.GTDB.top20)
-plot_bar(mouse.GTDB.top20, x = "Day", fill = "Phylum") + facet_wrap(~When, scales = "free_x")
+top20.GTDB <- names(sort(taxa_sums(mouse.GTDB_214), decreasing = TRUE))[1:20]
+mouse.GTDB_214.top20 <- transform_sample_counts(mouse.GTDB_214, function(OTU) OTU/sum(OTU))
+mouse.GTDB_214.top20 <- prune_taxa(top20.GTDB, mouse.GTDB_214.top20)
+plot_bar(mouse.GTDB_214.top20, x = "Day", fill = "Phylum") + facet_wrap(~When, scales = "free_x")
 
 ## ----cleanup, include = FALSE-------------------------------------------------
 options(oldopt)

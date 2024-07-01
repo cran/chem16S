@@ -3,7 +3,7 @@
 # Moved to chem16S 20220505
 # Add refdb argument 20221016
 
-get_metrics <- function(RDP = NULL, map = NULL, refdb = "GTDB", taxon_AA = NULL,
+get_metrics <- function(RDP = NULL, map = NULL, refdb = "GTDB_214", taxon_AA = NULL,
   groups = NULL, return_AA = FALSE, zero_AA = NULL, metrics = c("Zc", "nO2", "nH2O")) {
 
   # Exclude NA mappings
@@ -11,10 +11,8 @@ get_metrics <- function(RDP = NULL, map = NULL, refdb = "GTDB", taxon_AA = NULL,
   map <- na.omit(map)
   if(length(map) == 0) stop(paste("no available mappings to taxa in", refdb, "reference database"))
 
-  # Get amino acid compositions of taxa compiled from:
-  #   - RefSeq (no longer using precompiled metrics in taxon_metrics.csv 20220108) or
-  #   - GTDB 20221016
-  AApath <- file.path("extdata", refdb, "taxon_AA.csv.xz")
+  # Get amino acid compositions of taxa compiled from RefSeq or GTDB
+  AApath <- file.path("RefDB", refdb, "taxon_AA.csv.xz")
   AAfile <- system.file(AApath, package = "chem16S")
   if(is.null(taxon_AA)) taxon_AA <- read.csv(AAfile, as.is = TRUE)
   
@@ -41,6 +39,8 @@ get_metrics <- function(RDP = NULL, map = NULL, refdb = "GTDB", taxon_AA = NULL,
       t(thisRDP) %*% AAmat
     })
     AAcomp <- as.data.frame(do.call(rbind, AAcomp))
+    # Check that the total number of protein sequences is equal to the total number of classifications
+    stopifnot(sum(AAcomp[, "chains"]) == sum(RDPmat))
     # Names of samples are group names
     group <- names(groups)
     if(is.null(group)) group <- 1:length(groups)
@@ -53,8 +53,12 @@ get_metrics <- function(RDP = NULL, map = NULL, refdb = "GTDB", taxon_AA = NULL,
     # Just return the amino acid composition
     out <- cbind(samplecols, AAcomp)
   } else {
+    # Divide amino acid composition by number of proteins in order to calculate
+    # length and other protein-level metrics (pMW, etc.) correctly 20240329
+    AAcomp <- AAcomp / AAcomp$chains
     # Calculate chemical metrics from amino acid composition
     metrics_values <- calc_metrics(AAcomp, metrics)
+    colnames(metrics_values) <- metrics
     # Create output data frame
     out <- cbind(samplecols, metrics_values)
   }

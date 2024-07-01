@@ -5,19 +5,20 @@ export(
   "get_metrics",
   "get_metadata",
   "plot_metrics",
-  "add_hull",
   # Integration with phyloseq 20230608
   "ps_taxacounts", "ps_metrics", "plot_ps_metrics",
   # 20230617
   "plot_ps_metrics2",
   # 20230704
-  "calc_metrics", "chemlab"
+  "chemlab"
 )
 
 importFrom("stats", "aggregate", "na.omit")
 importFrom("utils", "read.csv", "read.table", "tail", "modifyList")
 importFrom("grDevices", "chull", "col2rgb", "rgb")
 importFrom("graphics", "box", "lines", "par", "polygon")
+# calc_metrics() moved to canprot 20240302
+importFrom("canprot", "calc_metrics", "cplab")
 
 # Integration with phyloseq 20230608
 # Moved phyloseq to Suggests 20230619
