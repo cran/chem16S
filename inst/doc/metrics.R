@@ -8,7 +8,7 @@ if (!nzchar(Sys.which("pngquant"))) pngquant <- NULL
 
 ## ----HTML, include = FALSE----------------------------------------------------
 Zc <- "<i>Z</i><sub>C</sub>"
-nH2O <- "<i>n</i><sub>H<sub>2</sub>O</sub>"
+nH2O <- "<i>n</i>H<sub>2</sub>O"
 
 ## ----load_packages, message = FALSE-------------------------------------------
 library(chem16S)

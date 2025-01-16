@@ -1,7 +1,7 @@
 ## ----HTML, include = FALSE----------------------------------------------------
 Zc <- "<i>Z</i><sub>C</sub>"
-nH2O <- "<i>n</i><sub>H<sub>2</sub>O</sub>"
-nO2 <- "<i>n</i><sub>O<sub>2</sub></sub>"
+nH2O <- "<i>n</i>H<sub>2</sub>O"
+nO2 <- "<i>n</i>O<sub>2</sub>"
 H2O <- "H<sub>2</sub>O"
 O2 <- "O<sub>2</sub>"
 
@@ -99,20 +99,20 @@ plot_ps_metrics2(mouse.RDP, color = "When", shape = "When", refdb = "RefSeq_206"
   geom_point(size = 3)
 
 ## ----data.GTDB, collapse = TRUE, fig.width = 6, fig.height = 4, fig.align = "center", pngquant = pngquant----
-data(mouse.GTDB_214)
-plot_ps_metrics2(mouse.GTDB_214, refdb = "GTDB_214", color = "When", shape = "When") + geom_point(size = 3)
+data(mouse.GTDB_220)
+plot_ps_metrics2(mouse.GTDB_220, refdb = "GTDB_220", color = "When", shape = "When") + geom_point(size = 3)
 
 ## ----early.GTDB, collapse = TRUE, fig.width = 6, fig.height = 4, fig.align = "center", pngquant = pngquant----
-metrics.GTDB <- ps_metrics(mouse.GTDB_214)
-is.early <- sample_data(mouse.GTDB_214)$When == "Early"
+metrics.GTDB <- ps_metrics(mouse.GTDB_220)
+is.early <- sample_data(mouse.GTDB_220)$When == "Early"
 iout <- which.min(metrics.GTDB[is.early, ]$nH2O)
-(day <- sample_data(mouse.GTDB_214)[is.early, ]$Day[iout])
+(day <- sample_data(mouse.GTDB_220)[is.early, ]$Day[iout])
 
 ## ----barplot.GTDB, fig.width = 7, fig.height = 5, fig.align = "center", pngquant = pngquant----
-top20.GTDB <- names(sort(taxa_sums(mouse.GTDB_214), decreasing = TRUE))[1:20]
-mouse.GTDB_214.top20 <- transform_sample_counts(mouse.GTDB_214, function(OTU) OTU/sum(OTU))
-mouse.GTDB_214.top20 <- prune_taxa(top20.GTDB, mouse.GTDB_214.top20)
-plot_bar(mouse.GTDB_214.top20, x = "Day", fill = "Phylum") + facet_wrap(~When, scales = "free_x")
+top20.GTDB <- names(sort(taxa_sums(mouse.GTDB_220), decreasing = TRUE))[1:20]
+mouse.GTDB_220.top20 <- transform_sample_counts(mouse.GTDB_220, function(OTU) OTU/sum(OTU))
+mouse.GTDB_220.top20 <- prune_taxa(top20.GTDB, mouse.GTDB_220.top20)
+plot_bar(mouse.GTDB_220.top20, x = "Day", fill = "Phylum") + facet_wrap(~When, scales = "free_x")
 
 ## ----cleanup, include = FALSE-------------------------------------------------
 options(oldopt)

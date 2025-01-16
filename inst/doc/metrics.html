@@ -352,7 +352,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><a href="#zc-for-genera-in-selected-phyla-and-classes"><i>Z</i><sub>C</sub> for genera in selected phyla and classes</a></li>
 <li><a href="#prokaryotic-genera-aggregated-to-phylum">Prokaryotic genera, aggregated to phylum</a></li>
 <li><a href="#prokaryotic-genera-aggregated-to-class">Prokaryotic genera, aggregated to class</a></li>
-<li><a href="#stoichiometric-hydration-state-nh2o">Stoichiometric hydration state (<i>n</i><sub>H<sub>2</sub>O</sub>)</a></li>
+<li><a href="#stoichiometric-hydration-state-nh2o">Stoichiometric hydration state (<i>n</i>H<sub>2</sub>O)</a></li>
 <li><a href="#viruses-and-prokaryotes">Viruses and prokaryotes</a></li>
 <li><a href="#other-metrics">Other metrics</a></li>
 <li><a href="#take-home-messages">Take-home messages</a></li>
@@ -377,13 +377,13 @@ function ToggleDiv(ID) {
 </script>
 <p>Here we visualize chemical metrics for archaeal and bacterial taxa and viruses using precomputed reference proteomes in the <strong>chem16S</strong> package.</p>
 <blockquote>
-<p><em>Chemical metrics</em> are molecular properties computed from elemental compositions – inferred from amino acid compositions of proteins – and include carbon oxidation state (<i>Z</i><sub>C</sub>) and stoichiometric hydration state (<i>n</i><sub>H<sub>2</sub>O</sub>), as described by <span class="citation">Dick et al. (<a href="#ref-DYT20" role="doc-biblioref">2020</a>)</span>.</p>
+<p><em>Chemical metrics</em> are molecular properties computed from elemental compositions – inferred from amino acid compositions of proteins – and include carbon oxidation state (<i>Z</i><sub>C</sub>) and stoichiometric hydration state (<i>n</i>H<sub>2</sub>O), as described by <span class="citation">Dick et al. (<a href="#ref-DYT20" role="doc-biblioref">2020</a>)</span>.</p>
 </blockquote>
 <p>This vignette uses the RefSeq reference database for reference proteomes. The GTDB reference database is also available in <strong>chem16S</strong> (and is the default for functions in the package), but doesn’t have viral reference proteomes, which are visualized below.</p>
 <div id="required-packages" class="section level2">
 <h2>Required packages</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(chem16S)</span></code></pre></div>
-<p>This vignette was compiled on 2024-07-01 with <strong>chem16S</strong> version 1.1.0.</p>
+<p>This vignette was compiled on 2025-01-16 with <strong>chem16S</strong> version 1.2.0.</p>
 </div>
 <div id="reference-proteomes-for-taxa" class="section level2">
 <h2>Reference proteomes for taxa</h2>
@@ -491,8 +491,8 @@ function ToggleDiv(ID) {
 <p><em>See take-home message #1.</em></p>
 </div>
 <div id="stoichiometric-hydration-state-nh2o" class="section level2">
-<h2>Stoichiometric hydration state (<i>n</i><sub>H<sub>2</sub>O</sub>)</h2>
-<p>As above, but calculate <i>n</i><sub>H<sub>2</sub>O</sub> instead of <i>Z</i><sub>C</sub>.</p>
+<h2>Stoichiometric hydration state (<i>n</i>H<sub>2</sub>O)</h2>
+<p>As above, but calculate <i>n</i>H<sub>2</sub>O instead of <i>Z</i><sub>C</sub>.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>taxon_nH2O &lt;-<span class="st"> </span>canprot<span class="op">::</span><span class="kw">calc_metrics</span>(taxon_AA, <span class="st">&quot;nH2O&quot;</span>)[, <span class="dv">1</span>]</span>
 <span id="cb16-2"><a href="#cb16-2"></a>get_nH2O &lt;-<span class="st"> </span><span class="cf">function</span>(genera) <span class="kw">na.omit</span>(taxon_nH2O[<span class="kw">match</span>(genera, taxon_AA<span class="op">$</span>organism)])</span>
 <span id="cb16-3"><a href="#cb16-3"></a></span>
@@ -512,8 +512,8 @@ function ToggleDiv(ID) {
 <div id="viruses-and-prokaryotes" class="section level2">
 <h2>Viruses and prokaryotes</h2>
 <ul>
-<li>Plot <i>Z</i><sub>C</sub> and <i>n</i><sub>H<sub>2</sub>O</sub> for viral and prokaryotic phyla with the most genus-level representatives.</li>
-<li>Label Bacteria with the lowest <i>n</i><sub>H<sub>2</sub>O</sub>.</li>
+<li>Plot <i>Z</i><sub>C</sub> and <i>n</i>H<sub>2</sub>O for viral and prokaryotic phyla with the most genus-level representatives.</li>
+<li>Label Bacteria with the lowest <i>n</i>H<sub>2</sub>O.</li>
 </ul>
 <button id="B-viruses_top50" onclick="ToggleDiv(&#39;viruses_top50&#39;)">
 Show code
@@ -592,7 +592,7 @@ Show code
 </div>
 <div id="other-metrics" class="section level2">
 <h2>Other metrics</h2>
-<p>Besides <i>Z</i><sub>C</sub> and <i>n</i><sub>H<sub>2</sub>O</sub>, the <code>calc_metrics()</code> function in <strong>canprot</strong> can calculate elemental ratios (H/C, N/C, O/C, and S/C), grand average of hydropathicity (GRAVY), isoelectric point (pI), average molecular weight of amino acid residues (MW), and protein length.</p>
+<p>Besides <i>Z</i><sub>C</sub> and <i>n</i>H<sub>2</sub>O, the <code>calc_metrics()</code> function in <strong>canprot</strong> can calculate elemental ratios (H/C, N/C, O/C, and S/C), grand average of hydropathicity (GRAVY), isoelectric point (pI), average molecular weight of amino acid residues (MW), and protein length.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>AAcomp &lt;-<span class="st"> </span>taxon_AA[<span class="kw">match</span>(classes, taxon_AA<span class="op">$</span>organism), ]</span>
 <span id="cb22-2"><a href="#cb22-2"></a>metrics &lt;-<span class="st"> </span>canprot<span class="op">::</span><span class="kw">calc_metrics</span>(AAcomp, <span class="kw">c</span>(<span class="st">&quot;HC&quot;</span>, <span class="st">&quot;OC&quot;</span>, <span class="st">&quot;NC&quot;</span>, <span class="st">&quot;SC&quot;</span>, <span class="st">&quot;GRAVY&quot;</span>, <span class="st">&quot;pI&quot;</span>, <span class="st">&quot;MW&quot;</span>, <span class="st">&quot;plength&quot;</span>))</span>
 <span id="cb22-3"><a href="#cb22-3"></a><span class="kw">layout</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)), <span class="dt">widths =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="fl">1.5</span>))</span>
@@ -610,8 +610,8 @@ Show code
 <h2>Take-home messages</h2>
 <ol style="list-style-type: decimal">
 <li>Methanococci and Epsilonproteobacteria are prokaryotic classes whose genera have proteins with the lowest mean <i>Z</i><sub>C</sub> in their respective phyla.</li>
-<li>Proteins in Gammaproteobacteria tend to have lower <i>n</i><sub>H<sub>2</sub>O</sub> than Alpha- and Betaproteobacteria.</li>
-<li>Viral proteins have lower <i>n</i><sub>H<sub>2</sub>O</sub> than most Bacteria and Archaea.</li>
+<li>Proteins in Gammaproteobacteria tend to have lower <i>n</i>H<sub>2</sub>O than Alpha- and Betaproteobacteria.</li>
+<li>Viral proteins have lower <i>n</i>H<sub>2</sub>O than most Bacteria and Archaea.</li>
 </ol>
 <p>Respectively, these findings suggest genomic adaptation by Methanococci and Epsilonproteobacteria – now known as Campylobacterota – to reducing environments (which may be found in submarine hot springs and anoxic zones of sediments), by Gammaproteobacteria to lower water availability in certain habitats, and by viruses to lower water availability in their environment. A notable observation in this regard is that viruses without an envelope have lower water content than bacterial cells <span class="citation">(Matthews, <a href="#ref-Mat75" role="doc-biblioref">1975</a>)</span>.</p>
 <p>In summary, chemical metrics provide insight into how environmental factors shape the amino acid and elemental composition of proteins.</p>

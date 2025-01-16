@@ -30,6 +30,7 @@ History:
     \item Late 2022. GTDB r207 was added as a reference database.
     \item June--July 2023. Integration with \pkg{phyloseq} and addition of vignettes: \emph{Chemical metrics of reference proteomes}, \emph{Integration of chem16S with phyloseq}, and \emph{Plotting two chemical metrics}. Default reference database changed to GTDB r207.
     \item April 2024. Updated to GTDB r214.
+    \item July 2024. Updated to GTDB r220.
   }
 
 }
@@ -83,7 +84,7 @@ History:
 
 }
 
-\section{Files in RefDB/GTDB_214}{
+\section{Files in RefDB/GTDB_220}{
 
   \describe{
     \item{\file{taxon_AA.R}}{Functions to process GTDB source files (Parks et al., 2022) and produce the following output file:}
@@ -113,7 +114,7 @@ History:
   \describe{
     \item{\file{pipeline.R}}{
       Pipeline for sequence data processing (uses external programs fastq-dump, vsearch, seqtk, RDP Classifier).
-      This was used to make the files in both \file{RDP} and \file{RDP-GTDB_207} (the latter with \code{GTDB = TRUE} in the script).
+      This was used to make the files in both \file{RDP} and \file{RDP-GTDB_220} (the latter with \code{GTDB = TRUE} in the script).
     }
     \item{\file{BGPF13.tab.xz}}{Heart Lake Geyser Basin.}
     \item{\file{HLA+16.tab.xz}}{Baltic Sea.}
@@ -122,9 +123,9 @@ History:
 
 }
 
-\section{Files in extdata/RDP-GTDB_207}{
+\section{Files in extdata/RDP-GTDB_220}{
 
-  Output of RDP Classifer using the GTDB r207 SSU training set (\doi{10.5281/zenodo.7633100}).
+  Output of RDP Classifer trained with 16S rRNA sequences from GTDB release 220 (\doi{https://doi.org/10.5281/zenodo.7633099}).
 
   \describe{
     \item{\file{BGPF13.tab.xz}}{Heart Lake Geyser Basin.}
@@ -134,9 +135,9 @@ History:
 
 }
 
-\section{Files in extdata/DADA2-GTDB_214}{
+\section{Files in extdata/DADA2-GTDB_220}{
 
-  Identification and taxonomic classification of sequences using DADA2 with GTDB r214.
+  Identification and taxonomic classification of sequences using DADA2 with GTDB r220.
 
   \describe{
     \item{\file{FEN+22}}{
@@ -157,6 +158,12 @@ History:
       \file{sample_data.csv} has data obtained from NCBI BioSample records for BioProject PRJNA860942.
       \file{*.png} are several plots created while running the DADA2 pipeline.
       \file{ps_ZFZ+23.rds} contains the phyloseq object with (including \code{otu_table}, \code{sample_data}, and \code{refseq} objects) created at the end of the DADA2 pipeline.
+    }
+  }
+
+  \describe{
+    \item{\file{mouse/pipeline.R}}{
+      Pipeline adapted from the DADA2 pipeline tutorial (Callahan, 2020) for processing the mouse example dataset (see \code{\link{chem16S-data}}).
     }
   }
 

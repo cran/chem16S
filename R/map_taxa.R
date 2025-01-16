@@ -4,7 +4,7 @@
 # Add refdb argument to use RefSeq or GTDB 20221016
 # TODO: warn when mapped percentage is below a certain value 20230615
 
-map_taxa <- function(taxacounts = NULL, refdb = "GTDB_214", taxon_AA = NULL, quiet = FALSE) {
+map_taxa <- function(taxacounts = NULL, refdb = "GTDB_220", taxon_AA = NULL, quiet = FALSE) {
 
   # Make group names by combining rank and name
   INPUTgroups <- paste(taxacounts$rank, taxacounts$name, sep = "_")
@@ -40,6 +40,32 @@ map_taxa <- function(taxacounts = NULL, refdb = "GTDB_214", taxon_AA = NULL, qui
             if(switchpercent[i] >= 0.1) message(paste0(from[i], " --> ", to[i], " (", switchpercent[i], "%)"))
           }
         }
+      }
+    }
+
+  }
+
+  # Post-curation mappings for GTDB release 220 20241130
+  # See https://data.gtdb.ecogenomic.org/releases/release220/220.0/RELEASE_NOTES.txt
+  if(refdb == "GTDB_220") {
+
+    mapping <- read.csv(system.file("extdata/GTDB_220_mappings.csv", package = "chem16S"))
+    OLD <- paste(mapping$OLD.rank, mapping$OLD.name, sep = "_")
+    NEW <- paste(mapping$NEW.rank, mapping$NEW.name, sep = "_")
+    iswitch <- INPUTgroups %in% OLD
+
+    if(any(iswitch)) {
+      # Make the switch
+      imap <- match(INPUTgroups[iswitch], OLD)
+      INPUTgroups[iswitch] <- NEW[imap]
+      if(!quiet) {
+        # Print message(s) about switched names and abundance
+        from <- OLD[imap]
+        to <- NEW[imap]
+        switchcounts <- groupcounts[iswitch]
+        switchpercent <- signif(switchcounts / sum(groupcounts) * 100, 2)
+        print(paste0("map_taxa", basetxt, ": using these post-curation mapping(s) for GTDB release 220:"))
+        for(i in seq_along(from)) message(paste0(from[i], " --> ", to[i], " (", switchpercent[i], "%)"))
       }
     }
 
